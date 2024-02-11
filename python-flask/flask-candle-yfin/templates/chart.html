@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Chart</title>
+</head>
+<body>
+    <form action="/" method="get">
+        <label for="ticker">Ticker:</label>
+        <select name="ticker" id="ticker">
+            {% for ticker in tickers %}
+            <option value="{{ ticker }}" {% if ticker == selected_ticker %} selected {% endif %}>{{ ticker }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="time_range">Time Range (e.g., "1mo", "5d"):</label>
+        <input type="text" id="time_range" name="time_range" value="{{ time_range }}">
+
+        <label for="interval">Interval (e.g., "1d", "1h"):</label>
+        <input type="text" id="interval" name="interval" value="{{ interval }}">
+
+        <button type="submit">Update Chart</button>
+    </form>
+    {{ plot_div|safe }}
+</body>
+</html>

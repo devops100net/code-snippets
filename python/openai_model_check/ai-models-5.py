@@ -20,21 +20,18 @@ data.sort_values(by=['owned_by', 'created'], ascending=[False, False], inplace=T
 
 # Initialize a new column 'CHECK' with default value 'NO'
 data['CHECK'] = 'NO'
-data['COST'] = 0.0
 
 # Iterate over each model and test it
 for model_id in data.index:
     try:
-        with openai.ChatCompletion.create_callback() as cb:
-            response = openai.ChatCompletion.create(model=model_id, messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "What is the capital of Norway?"}])
-            if "Oslo" in response['choices'][0]['message']['content']:
-                data.loc[model_id, 'CHECK'] = 'OSLO'
-                data.loc[model_id, 'COST'] = cb.usage['total_tokens'] * 0.0002 # assuming a rate of $0.0002 per token
+        response = openai.ChatCompletion.create(model=model_id, messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "What is the capital of Norway?"}])
+        if "Oslo" in response['choices'][0]['message']['content']:
+            data.loc[model_id, 'CHECK'] = 'OSLO'
     except Exception as e:
         pass
 
-# Reorder the columns to place 'CHECK' and 'COST' as the second and third columns
-data = data[['CHECK', 'COST', 'created', 'owned_by']]
+# Reorder the columns to place 'CHECK' as the second column
+data = data[['CHECK', 'object', 'created', 'owned_by']]
 
 table = data.to_markdown()
 line_length = max(len(line) for line in table.split("\n"))
@@ -44,3 +41,4 @@ print("Current Date and Time: ", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 print('─' * line_length)
 print(table)
 print('─' * line_length)
+

@@ -18,7 +18,11 @@ def run_model_check(api_key):
     # Retrieve models from OpenAI and store in DataFrame
     models = openai.Model.list()
     data = pd.DataFrame(models["data"])
-    data['created'] = pd.to_datetime(data['created'], unit='s')
+
+    # Convert 'created' column to a datetime format and display it in the desired format
+    data['created'] = pd.to_datetime(data['created'], unit='s').dt.strftime("%Y-%m-%d %H:%M")
+
+    # Set 'id' as the index
     data.set_index('id', inplace=True)
 
     # Sort the data by 'owned_by' and 'created' in descending order
@@ -26,7 +30,7 @@ def run_model_check(api_key):
 
     # Initialize a new column 'CHECK' with default value 'NO'
     data['CHECK'] = 'NO'
-    
+
     # Progress bar setup
     progress_bar = st.progress(0)
     total_models = len(data)

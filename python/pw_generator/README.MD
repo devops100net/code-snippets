@@ -9,9 +9,11 @@
 ### Usage
 To generate a password with default length (12 characters), simply run the following command:
 
-python password_generator.py
-Alternatively, you can specify a desired password length by passing an integer to the function, like this:
+```
+python gen_pw.py
+```
 
+Alternatively, you can specify a desired password length by passing an integer to the function, like this:
 
 password = generate_password(16)
 print(password)
